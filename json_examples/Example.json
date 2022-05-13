@@ -1,0 +1,48 @@
+{
+  "Name": "Nazwa",
+  "Author": "Autor",
+  "Description": "Opis",
+  "InstallerVersion": "1.2.3.4",
+  "SchemaVersion": "2.1.3.1",
+  "Prerequisites": [
+    {
+      "UpgradeCode": "{f3d05053-6f2b-4dc4-8a58-7229f0bfaf04}",
+      "Name": "Nazwa",
+      "RequiredVersion": "1.5.3.6"
+    },
+    {
+      "UpgradeCode": "{1da34eb4-4ea5-422d-a66c-8ba80ae2b5c1}",
+      "Name": "PrzykladowyProgram",
+      "RequiredVersion": "6.8.3.0"
+    }
+  ],
+  "SystemRequirements": {
+    "WindowsVersion": "10",
+    "RegistryKeys": [
+      {
+        "Path": "HKEY_CURRENT_USER\\Microsoft\\Windows\\CurrentVersion\\Explorer\\StartupApproved\\Run",
+        "Key": "OneDriveSetup",
+        "Value": "true"
+      },
+      {
+        "Path": "HKEY_LOCAL_MACHINE\\SOFTWARE\\Clients\\StartMenuInternet\\Google Chrome\\InstallInfo",
+        "Key": "IconsVisible",
+        "Value": "1"
+      }
+    ]
+  },
+  "FilesToExecute": [
+    {
+      "FileName": "Installer.exe",
+      "DefaultCommandLineArgumeters": "--silent -r -u",
+      "FilePath": "C:/build/",
+      "Order": 1
+    },
+    {
+      "FileName": "SomeScript.ps1",
+      "DefaultCommandLineArgumeters": "-FirstRun True -Project Installer",
+      "FilePath": "C:/scripts/",
+      "Order": 2
+    }
+  ]
+}
