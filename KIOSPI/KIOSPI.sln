@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Kreator", "Kreator\Kreator.
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Common", "Common\Common.csproj", "{133AEBE9-4D06-451C-9A2C-14232257EFA8}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Kreator.UnitTests", "Kreator.UnitTests\Kreator.UnitTests.csproj", "{C321743B-3893-4131-A3AC-B86E17A59FB4}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{133AEBE9-4D06-451C-9A2C-14232257EFA8}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{133AEBE9-4D06-451C-9A2C-14232257EFA8}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{133AEBE9-4D06-451C-9A2C-14232257EFA8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C321743B-3893-4131-A3AC-B86E17A59FB4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C321743B-3893-4131-A3AC-B86E17A59FB4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C321743B-3893-4131-A3AC-B86E17A59FB4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C321743B-3893-4131-A3AC-B86E17A59FB4}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
