@@ -33,15 +33,13 @@
   },
   "FilesToExecute": [
     {
-      "FileName": "Installer.exe",
       "DefaultCommandLineArgumeters": "--silent -r -u",
-      "FilePath": "C:/build/",
+      "FilePath": "C:/build/Installer.exe",
       "Order": 1
     },
     {
-      "FileName": "SomeScript.ps1",
       "DefaultCommandLineArgumeters": "-FirstRun True -Project Installer",
-      "FilePath": "C:/scripts/",
+      "FilePath": "C:/scripts/SomeScript.ps1",
       "Order": 2
     }
   ]

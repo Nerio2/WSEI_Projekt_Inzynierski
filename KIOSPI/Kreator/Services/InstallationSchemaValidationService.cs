@@ -1,4 +1,6 @@
-﻿using Common.Models;
+﻿using Common.Interfaces;
+using Common.Services;
+using Common.Models;
 using Kreator.Interfaces;
 
 namespace Kreator.Services
@@ -6,6 +8,7 @@ namespace Kreator.Services
     public class InstallationSchemaValidationService : IInstallationSchemaValidationService
     {
         //todo logger
+        private IFileService _fileService = new FileService();
 
         public List<SchemaValidationResponse> ValidateSchema(InstallationSchema installationSchema)
         {
@@ -24,31 +27,47 @@ namespace Kreator.Services
 
         private IEnumerable<SchemaValidationResponse> ValidatePrerequisites(IList<PrerequisiteSchema> prerequisites)
         {
-            foreach (PrerequisiteSchema prerequisite in prerequisites)
-                foreach (SchemaValidationResponse prerequisiteMainPropertiesValidation in prerequisite.ValidateMainProperties())
-                    yield return prerequisiteMainPropertiesValidation;
+            if (prerequisites != null)
+                foreach (PrerequisiteSchema prerequisite in prerequisites)
+                    foreach (SchemaValidationResponse prerequisiteMainPropertiesValidation in prerequisite.ValidateMainProperties())
+                        yield return prerequisiteMainPropertiesValidation;
         }
 
         private IEnumerable<SchemaValidationResponse> ValidateSystemRequirements(SystemRequirementsSchema systemRequirements)
         {
-            foreach (SchemaValidationResponse systemRequirementsValidation in systemRequirements.ValidateMainProperties())
-                yield return systemRequirementsValidation;
-            foreach (SchemaValidationResponse registryKeysValidationResponse in ValidateRegistryKeys(systemRequirements.RegistryKeys))
-                yield return registryKeysValidationResponse;
+            if (systemRequirements != null)
+            {
+                foreach (SchemaValidationResponse systemRequirementsValidation in systemRequirements.ValidateMainProperties())
+                    yield return systemRequirementsValidation;
+                foreach (SchemaValidationResponse registryKeysValidationResponse in ValidateRegistryKeys(systemRequirements.RegistryKeys))
+                    yield return registryKeysValidationResponse;
+            }
         }
 
         private IEnumerable<SchemaValidationResponse> ValidateRegistryKeys(IList<RegistryKeySchema> registryKeys)
         {
-            foreach (RegistryKeySchema registryKey in registryKeys)
-                foreach (SchemaValidationResponse registryKeyPropertiesValidation in registryKey.ValidateMainProperties())
-                    yield return registryKeyPropertiesValidation;
+            if (registryKeys != null)
+                foreach (RegistryKeySchema registryKey in registryKeys)
+                    foreach (SchemaValidationResponse registryKeyPropertiesValidation in registryKey.ValidateMainProperties())
+                        yield return registryKeyPropertiesValidation;
         }
 
         private IEnumerable<SchemaValidationResponse> ValidateFilesToExecute(IList<FileToExecuteSchema> files)
         {
+            List<int> orderNumbers = new List<int>(files.Count);
             foreach (FileToExecuteSchema file in files)
-                foreach (SchemaValidationResponse fileMainPropertiesValidation in file.ValidateMainProperties())
-                    yield return fileMainPropertiesValidation;
+            {
+                if (orderNumbers.Any(number => number == file.Order))
+                {
+                    yield return new SchemaValidationError($"Files to execute: Order <{file.Order}> is duplicated!");
+                }
+                orderNumbers.Add(file.Order);
+
+                if (string.IsNullOrEmpty(file.FilePath) || !_fileService.Exists(file.FilePath))
+                {
+                    yield return new SchemaValidationError($"Files to execute: FilePath <{file.FilePath}> does not exists!");
+                }
+            }
         }
     }
 }
