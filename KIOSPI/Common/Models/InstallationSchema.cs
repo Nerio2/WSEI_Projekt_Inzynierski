@@ -1,6 +1,6 @@
 ﻿namespace Common.Models
 {
-    //TODO: InstallationSchemaBuilder
+    //TODO: InstallationSchemaBuilder?
     public class InstallationSchema
     {
         public string? Name { get; set; }
@@ -10,7 +10,7 @@
         public Version? SchemaVersion { get; set; }
         public IList<PrerequisiteSchema>? Prerequisites { get; set; }
         public SystemRequirementsSchema? SystemRequirements { get; set; } 
-        public IList<FileToExecuteSchema> FilesToExecute { get; set; } 
+        public IList<ExecutableFileSchema> FilesToExecute { get; set; } 
 
         public IEnumerable<SchemaValidationResponse> ValidateMainProperties()
         {

@@ -1,5 +1,4 @@
-﻿using Kreator.Models;
-using Common.Models;
+﻿using Common.Models;
 
 namespace Kreator.Interfaces
 {

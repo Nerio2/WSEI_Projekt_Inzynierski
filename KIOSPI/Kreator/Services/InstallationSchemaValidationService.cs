@@ -52,10 +52,10 @@ namespace Kreator.Services
                         yield return registryKeyPropertiesValidation;
         }
 
-        private IEnumerable<SchemaValidationResponse> ValidateFilesToExecute(IList<FileToExecuteSchema> files)
+        private IEnumerable<SchemaValidationResponse> ValidateFilesToExecute(IList<ExecutableFileSchema> files)
         {
             List<int> orderNumbers = new List<int>(files.Count);
-            foreach (FileToExecuteSchema file in files)
+            foreach (ExecutableFileSchema file in files)
             {
                 if (orderNumbers.Any(number => number == file.Order))
                 {

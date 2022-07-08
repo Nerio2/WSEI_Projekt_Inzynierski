@@ -32,7 +32,15 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="Helpers\IRegistrySearchHelper.cs" />
+    <Compile Include="Helpers\IWindowsVersionsHelper.cs" />
+    <Compile Include="Helpers\RegistrySearchHelper.cs" />
+    <Compile Include="Helpers\WindowsVersionsHelper.cs" />
+    <Compile Include="logger\InstallerLogger.cs" />
     <Compile Include="Program.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Services\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
