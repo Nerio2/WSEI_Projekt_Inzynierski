@@ -4,6 +4,6 @@ namespace Common.Interfaces
 {
     public interface IInstalationSchemaService
     {
-        public InstallationSchema ReadInstallationSchema(string filePath);
+        InstallationSchema ReadInstallationSchema(string filePath);
     }
 }

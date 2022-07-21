@@ -1,10 +1,13 @@
-﻿namespace Common.Models
+﻿using System.Collections.Generic;
+
+namespace Common.Models
 {
     public class RegistryKeySchema
     {
         public string Path { get; set; }
         public string Key { get; set; }
         public string Value { get; set; }
+        public string ErrorMessage { get; set; }
 
         public IEnumerable<SchemaValidationResponse> ValidateMainProperties()
         {
@@ -15,12 +18,17 @@
 
             if (string.IsNullOrEmpty(Key))
             {
-                yield return new SchemaValidationWarning("System requirements: Registry Keys: Key is empty.");
+                yield return new SchemaValidationError("System requirements: Registry Keys: Key is empty.");
             }
 
             if (string.IsNullOrEmpty(Value))
             {
-                yield return new SchemaValidationWarning("System requirements: Registry Keys: Value is empty.");
+                yield return new SchemaValidationError("System requirements: Registry Keys: Value is empty.");
+            }
+
+            if (string.IsNullOrEmpty(ErrorMessage))
+            {
+                yield return new SchemaValidationError("System requirements: Registry Keys: ErrorMessage is empty.");
             }
         }
     }

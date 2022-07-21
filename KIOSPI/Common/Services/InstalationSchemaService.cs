@@ -4,7 +4,7 @@ using Newtonsoft.Json;
 
 namespace Common.Services
 {
-    internal class InstalationSchemaService : IInstalationSchemaService
+    public class InstalationSchemaService : IInstalationSchemaService
     {
         public InstallationSchema ReadInstallationSchema(string filePath)
         {

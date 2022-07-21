@@ -2,6 +2,6 @@
 {
     public interface IFileService
     {
-        public bool Exists(string filePath);
+        bool Exists(string filePath);
     }
 }

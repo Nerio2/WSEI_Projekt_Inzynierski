@@ -7,6 +7,8 @@ namespace Kreator.Interfaces
     {
         void CreateInstallationPackage(List<ExecutableFilePackage> files, string outputPath);
 
-        void CreateInstalator(string packagePath, string schemaPath);
+        void CreateInstalator(string outputPath);
+
+        ExecutableFilePackage PrepareInstallerSchemaFile(InstallationSchema schemaBase);
     }
 }

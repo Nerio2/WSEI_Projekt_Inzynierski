@@ -4,14 +4,14 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{85174DD0-ECD3-4C32-AC14-80E0BF4847FA}</ProjectGuid>
+    <ProjectGuid>{B6B78696-74FC-4998-B54C-6CD688F09EC5}</ProjectGuid>
     <OutputType>WinExe</OutputType>
-    <RootNamespace>Instaler</RootNamespace>
-    <AssemblyName>Instaler</AssemblyName>
-    <TargetFrameworkVersion>v4.5.1</TargetFrameworkVersion>
+    <RootNamespace>Installer1</RootNamespace>
+    <AssemblyName>Installer1</AssemblyName>
+    <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
+    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
     <Deterministic>true</Deterministic>
-    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -22,7 +22,6 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -32,34 +31,19 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup>
     <StartupObject />
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="Helpers\IRegistrySearchHelper.cs" />
-    <Compile Include="Helpers\IWindowsVersionsHelper.cs" />
-    <Compile Include="Helpers\RegistrySearchHelper.cs" />
-    <Compile Include="Helpers\WindowsVersionsHelper.cs" />
-    <Compile Include="logger\InstallerLogger.cs" />
+    <None Include="App.config" />
+  </ItemGroup>
+  <ItemGroup>
     <Compile Include="Program.cs" />
-    <Compile Include="Services\FileExecutorService.cs" />
     <Compile Include="Services\PackageService.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Reference Include="System" />
     <Reference Include="System.IO.Compression.FileSystem" />
-    <Reference Include="WindowsBase" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="app.config" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\Common\Common.csproj">
-      <Project>{3FE8748B-507A-4C69-9A36-DE393CD04A18}</Project>
-      <Name>Common</Name>
-    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

@@ -1,4 +1,7 @@
-﻿namespace Common.Models
+﻿using System;
+using System.Collections.Generic;
+
+namespace Common.Models
 {
     public class PrerequisiteSchema
     {
