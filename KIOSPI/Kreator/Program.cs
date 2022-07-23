@@ -24,12 +24,20 @@ namespace Kreator
 
 
             Console.WriteLine("Reading command line arguments...");
-            //todo odczyt command line argumentow
+            CommandLineSettings cliSettings = new CommandLineSettings(args);
             Console.WriteLine("Reading command line arguments - DONE");
+            if (cliSettings.EndApplication)
+            {
+                if (!string.IsNullOrEmpty(cliSettings.EndApplicationErrorMessage))
+                {
+                    Console.WriteLine(cliSettings.EndApplicationErrorMessage);
+                }
+                return;
+            }
 
 
             Console.WriteLine("Reading instalation schema...");
-            InstallationSchema schema = instalationSchemaService.ReadInstallationSchema(""); //todo file path
+            InstallationSchema schema = instalationSchemaService.ReadInstallationSchema(cliSettings.SchemaPath);
             Console.WriteLine("Reading instalation schema - DONE");
 
 
@@ -50,12 +58,12 @@ namespace Kreator
             {
                 zipFiles.Add(new ExecutableFilePackage(file));
             }
-            instalatorService.CreateInstallationPackage(zipFiles, ""); //todo output path
+            instalatorService.CreateInstallationPackage(zipFiles, cliSettings.OutputPath); //todo output path
             Console.WriteLine("Preparing zip - DONE");
 
 
             Console.WriteLine("Creating installer...");
-            instalatorService.CreateInstalator(""); //todo output path
+            instalatorService.CreateInstalator(cliSettings.OutputPath); //todo output path
             Console.WriteLine("Creating installer - DONE");
         }
     }

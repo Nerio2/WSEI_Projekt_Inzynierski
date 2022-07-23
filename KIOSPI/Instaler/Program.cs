@@ -35,9 +35,9 @@ namespace Instaler
 
         public static void Main(string[] args)
         {
-            _logger.LogInfo("Starting installation...");
-
             _logger = new InstallerLogger();
+
+            _logger.LogInfo("Starting installation...");
 
             //todo dependency injection?
             PackageService packageService = new PackageService();
