@@ -9,7 +9,7 @@
         {
             if (Directory.Exists(_tempDirectory))
             {
-                Directory.Delete(_tempDirectory);
+                Directory.Delete(_tempDirectory, true);
             }
             Directory.CreateDirectory(_tempDirectory);
         }
@@ -18,7 +18,7 @@
         {
             if (Directory.Exists(_tempDirectory))
             {
-                Directory.Delete(_tempDirectory);
+                Directory.Delete(_tempDirectory, true);
             }
         }
     }

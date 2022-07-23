@@ -44,13 +44,35 @@ namespace Kreator.Models
                 {
                     if (invoker.Equals(args[i]))
                     {
-                        value = (T)Activator.CreateInstance(typeof(T), args[i + 1]);
+                        SetValue(args[i + 1]);
+                        return;
                     }
                 }
             }
-            if (DefaultValue != null)
-                value = DefaultValue; //todo obsluga numerycznych
-            value = default(T);
+            SetValue(string.Empty);
+        }
+
+        private void SetValue(string value)
+        {
+            try
+            {
+                this.value = (T)Activator.CreateInstance(typeof(T), value);
+            }
+            catch (Exception)
+            {
+                try
+                {
+                    this.value = (T)Convert.ChangeType(value, typeof(T));
+                }
+                catch (Exception)
+                {
+                    if (DefaultValue != null)
+                    {
+                        this.value = DefaultValue;
+                    }
+                    this.value = default(T);
+                }
+            }
         }
 
         public bool IsInvoked(string[] args)

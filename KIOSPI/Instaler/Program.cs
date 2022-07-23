@@ -1,11 +1,10 @@
-﻿using Common.Interfaces;
-using Common.Models;
-using Common.Services;
+﻿using Common.Models;
 using Instaler.Helpers;
 using Instaler.logger;
 using Instaler.Services;
 using System;
 using System.IO;
+using System.Reflection;
 
 namespace Instaler
 {
@@ -42,7 +41,6 @@ namespace Instaler
             //todo dependency injection?
             PackageService packageService = new PackageService();
             FileExecutorService fileExecutorService = new FileExecutorService();
-            IInstalationSchemaService instalationSchemaService = new InstalationSchemaService();
             IRegistrySearchHelper registrySearchHelper = new RegistrySearchHelper();
             IWindowsVersionsHelper windowsVersionsHelper = new WindowsVersionsHelper();
 
@@ -52,49 +50,65 @@ namespace Instaler
             _logger.LogInfo("Unpacking installation package - DONE");
 
             _logger.LogInfo("Reading installation schema...");
-            InstallationSchema schema = instalationSchemaService.ReadInstallationSchema(Path.Combine(package, InstallationSchema.DefaultFileName));
+
+            string schemaPath = Path.Combine(package, InstallationSchema.DefaultFileName);
+
+            _logger.LogInfo("Loading Newtonsoft dll...");
+            var DLL = Assembly.LoadFile(Path.Combine(package, "Newtonsoft.Json.dll"));
+            var type = DLL.GetType("Newtonsoft.Json.JsonConvert");
+            var deserializeMethod = type.GetMethod("DeserializeObject", new Type[] { typeof(string), typeof(Type) });
+            InstallationSchema schema = (InstallationSchema)deserializeMethod
+                .Invoke(null, new object[] { File.ReadAllText(schemaPath), typeof(InstallationSchema) });
+            _logger.LogInfo("Loading Newtonsoft dll - DONE");
+
+            AppName = schema.Name;
             _logger.LogInfo("Reading installation schema - DONE");
 
-            _logger.LogInfo("Validating system requirements...");
-            WindowsVersion requiredWindows = windowsVersionsHelper.GetWindowsVersionFromBuildVersion(schema.SystemRequirements.WindowsVersion);
-            _logger.LogInfo("Windows required version: " + requiredWindows.ToString());
-            WindowsVersion currentWindows = windowsVersionsHelper.GetWindowsVersionFromBuildVersion(registrySearchHelper.GetWindowsBuildNumber());
-            _logger.LogInfo("Windows current version: " + currentWindows.ToString());
-            if (requiredWindows > currentWindows)
+            if (schema.SystemRequirements != null)
             {
-                _logger.LogError("Windows version is too low.");
-                Environment.ExitCode = (int)ExitCodes.WindowsVersionTooLow;
-                return;
-            }
-            else
-            {
-                _logger.LogInfo("Windows version is ok.");
-            }
-
-            foreach (RegistryKeySchema reg in schema.SystemRequirements.RegistryKeys)
-            {
-                if (!reg.Value.Equals(registrySearchHelper.GetHKLMRegistryValue(reg.Path, reg.Key)))
+                _logger.LogInfo("Validating system requirements..."); //todo retest
+                WindowsVersion requiredWindows = windowsVersionsHelper.GetWindowsVersionFromBuildVersion(schema.SystemRequirements.WindowsVersion);
+                _logger.LogInfo("Windows required version: " + requiredWindows.ToString());
+                WindowsVersion currentWindows = windowsVersionsHelper.GetWindowsVersionFromBuildVersion(registrySearchHelper.GetWindowsBuildNumber());
+                _logger.LogInfo("Windows current version: " + currentWindows.ToString());
+                if (requiredWindows > currentWindows)
                 {
-                    _logger.LogError(reg.ErrorMessage);
-                    Environment.ExitCode = (int)ExitCodes.RegistryEntryRequired;
+                    _logger.LogError("Windows version is too low.");
+                    Environment.ExitCode = (int)ExitCodes.WindowsVersionTooLow;
                     return;
                 }
-            }
-            _logger.LogInfo("Validating system requirements - DONE");
-
-            _logger.LogInfo("Checking prerequisites...");
-            foreach (PrerequisiteSchema prerequisite in schema.Prerequisites)
-            {
-                Version currentVersion = registrySearchHelper.GetProgramVersion(prerequisite.UpgradeCode);
-                if (currentVersion == null || prerequisite.RequiredVersion > currentVersion)
+                else
                 {
-                    string program = string.IsNullOrEmpty(prerequisite.Name) ? prerequisite.UpgradeCode : prerequisite.Name;
-                    _logger.LogError($"Program {program} v {prerequisite.RequiredVersion} is required.");
-                    Environment.ExitCode = (int)ExitCodes.PrerequisiteRequired;
-                    return;
+                    _logger.LogInfo("Windows version is ok.");
                 }
+
+                foreach (RegistryKeySchema reg in schema.SystemRequirements.RegistryKeys)
+                {
+                    if (!reg.Value.Equals(registrySearchHelper.GetHKLMRegistryValue(reg.Path, reg.Key)))
+                    {
+                        _logger.LogError(reg.ErrorMessage);
+                        Environment.ExitCode = (int)ExitCodes.RegistryEntryRequired;
+                        return;
+                    }
+                }
+                _logger.LogInfo("Validating system requirements - DONE");
             }
-            _logger.LogInfo("Checking prerequisites - DONE");
+            if (schema.Prerequisites != null)
+            {
+                _logger.LogInfo("Checking prerequisites..."); //todo retest
+                foreach (PrerequisiteSchema prerequisite in schema.Prerequisites)
+                {
+                    Version currentVersion = registrySearchHelper.GetProgramVersion(prerequisite.UpgradeCode);
+                    if (currentVersion == null || prerequisite.RequiredVersion > currentVersion)
+                    {
+                        string program = string.IsNullOrEmpty(prerequisite.Name) ? prerequisite.UpgradeCode : prerequisite.Name;
+                        _logger.LogError($"Program {program} v {prerequisite.RequiredVersion} is required.");
+                        Environment.ExitCode = (int)ExitCodes.PrerequisiteRequired;
+                        return;
+                    }
+                }
+                _logger.LogInfo("Checking prerequisites - DONE");
+            }
 
             _logger.LogInfo("Validating installation files...");
             foreach (ExecutableFileSchema file in schema.FilesToExecute)
@@ -111,7 +125,7 @@ namespace Instaler
             _logger.LogInfo("Executing installation files...");
             foreach (ExecutableFileSchema file in schema.FilesToExecute)
             {
-                _logger.LogInfo($"Starting {file.FilePath} installation...");
+                _logger.LogInfo($"Starting {file.FilePath}...");
                 int exitCode = fileExecutorService.ExecuteFile(Path.Combine(package, file.FilePath), file.DefaultCommandLineArgumeters);
                 if (exitCode != 0)
                 {
@@ -120,7 +134,7 @@ namespace Instaler
                 }
                 else
                 {
-                    _logger.LogInfo($"{file.FilePath} installation completed sucessfully.");
+                    _logger.LogInfo($"{file.FilePath} executed sucessfully.");
                 }
             }
             _logger.LogInfo("Executing installation files - DONE");

@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "Kreator": {
+      "commandName": "Project",
+      "commandLineArgs": "--schema \"C:\\test\\testschema.json\" --output \"C:\\test\\output\""
+    }
+  }
+}

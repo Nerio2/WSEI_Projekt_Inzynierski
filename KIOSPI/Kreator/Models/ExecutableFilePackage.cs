@@ -13,6 +13,11 @@ namespace Kreator.Models
             FilePath = schema.FilePath;
         }
 
+        public ExecutableFilePackage(string filePath)
+        {
+            FilePath = filePath;
+        }
+
         public ExecutableFilePackage(string name, string content)
         {
             FilePath = name;

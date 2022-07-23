@@ -1,12 +1,15 @@
 ﻿using System;
 using System.IO;
 using System.Linq;
+using System.Threading;
 
 namespace Instaler.logger
 {
     public class InstallerLogger
     {
-        private string _logFileName;
+        private string _runtimeLogFileName;
+
+        private const string _runtimeLogFileNamePrefix = "KIOSPI_";
 
         private const string _logFileRuntimeExtension = ".log.temp";
 
@@ -14,16 +17,14 @@ namespace Instaler.logger
 
         private const string _defaultDrive = @"C:\";
 
-        private FileStream _fileStream;
-
         private string GetRuntimeFullFilePath()
-            => GetLogFilePath() + _logFileName + _logFileRuntimeExtension;
+            => GetLogFilePath() + _runtimeLogFileName + _logFileRuntimeExtension;
 
-        private string GetFullFilePath()
-            => GetLogFilePath() + _logFileName + _logFileExtension;
+        private string GetFullFilePath(string logFileName)
+            => GetLogFilePath() + logFileName + _logFileExtension;
 
         private string GetLogFilePath()
-            => GetDrive() + @"Users\" + Environment.UserName + @"\AppData\Local\Temp\";
+            => GetDrive() + @"Users\" + Environment.UserName + @"\AppData\Local\Temp\KIOSPI\";
 
         private string GetDrive()
             => Environment.GetLogicalDrives().Any(drive => drive.Equals(_defaultDrive)) ? _defaultDrive : Environment.GetLogicalDrives()[0];
@@ -33,24 +34,22 @@ namespace Instaler.logger
 
         public InstallerLogger()
         {
-            //todo nie kiospi tylko nazwa ze schematu
-            _logFileName = "KIOSPI_" + Program.InstallerActualAction + "_" + DateTime.Now.ToString("yyyy-MM-dd_HH:mm:ss:fff");
-            string path = GetRuntimeFullFilePath().Replace('\\', '/');
-            _fileStream = new FileStream(path, FileMode.Create);
+            _runtimeLogFileName = _runtimeLogFileNamePrefix + Program.InstallerActualAction + "_" + DateTime.Now.ToString("yyyy-MM-dd_HH-mm-ss-fff");
+            string path = GetRuntimeFullFilePath();
+            Directory.CreateDirectory(Path.GetDirectoryName(path));
+            var fs = File.Create(path);
+            fs.Dispose();
         }
 
         ~InstallerLogger()
         {
-            _fileStream.Dispose();
-            File.Move(GetRuntimeFullFilePath(), GetFullFilePath());
+            string logFileName = _runtimeLogFileName.Replace(_runtimeLogFileNamePrefix, Program.AppName + "_");
+            File.Move(GetRuntimeFullFilePath(), GetFullFilePath(logFileName));
         }
 
         private void Log(string message)
         {
-            using (var sw = new StreamWriter(_fileStream))
-            {
-                sw.WriteLine(_logMessagePrefix + message + _logMessageSuffix);
-            }
+            File.AppendAllText(GetRuntimeFullFilePath(), _logMessagePrefix + message + _logMessageSuffix);
         }
 
         public void LogInfo(string message)

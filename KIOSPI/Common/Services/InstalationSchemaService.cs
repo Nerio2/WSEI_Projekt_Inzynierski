@@ -1,6 +1,7 @@
 ﻿using Common.Interfaces;
 using Common.Models;
 using Newtonsoft.Json;
+using System.IO;
 
 namespace Common.Services
 {
@@ -8,7 +9,7 @@ namespace Common.Services
     {
         public InstallationSchema ReadInstallationSchema(string filePath)
         {
-            return JsonConvert.DeserializeObject<InstallationSchema>(filePath);
+            return JsonConvert.DeserializeObject<InstallationSchema>(File.ReadAllText(filePath));
         }
     }
 }

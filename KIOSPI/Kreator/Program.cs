@@ -54,6 +54,9 @@ namespace Kreator
             Console.WriteLine("Preparing instalation schema for installer..."); //debug
             zipFiles.Add(instalatorService.PrepareInstallerSchemaFile(schema));
             Console.WriteLine("Preparing instalation schema for installer - DONE");//debug
+            Console.WriteLine("Adding DLL files...");
+            zipFiles.Add(new ExecutableFilePackage("Newtonsoft.Json.dll"));
+            Console.WriteLine("Adding DLL files - DONE");
             foreach (var file in schema.FilesToExecute)
             {
                 zipFiles.Add(new ExecutableFilePackage(file));

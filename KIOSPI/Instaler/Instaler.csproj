@@ -5,13 +5,28 @@
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{85174DD0-ECD3-4C32-AC14-80E0BF4847FA}</ProjectGuid>
-    <OutputType>WinExe</OutputType>
+    <OutputType>Exe</OutputType>
     <RootNamespace>Instaler</RootNamespace>
     <AssemblyName>Instaler</AssemblyName>
     <TargetFrameworkVersion>v4.5.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <Deterministic>true</Deterministic>
     <TargetFrameworkProfile />
+    <PublishUrl>publish\</PublishUrl>
+    <Install>true</Install>
+    <InstallFrom>Disk</InstallFrom>
+    <UpdateEnabled>false</UpdateEnabled>
+    <UpdateMode>Foreground</UpdateMode>
+    <UpdateInterval>7</UpdateInterval>
+    <UpdateIntervalUnits>Days</UpdateIntervalUnits>
+    <UpdatePeriodically>false</UpdatePeriodically>
+    <UpdateRequired>false</UpdateRequired>
+    <MapFileExtensions>true</MapFileExtensions>
+    <ApplicationRevision>0</ApplicationRevision>
+    <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
+    <IsWebBootstrapper>false</IsWebBootstrapper>
+    <UseApplicationTrust>false</UseApplicationTrust>
+    <BootstrapperEnabled>true</BootstrapperEnabled>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -42,6 +57,36 @@
     <PlatformTarget>x86</PlatformTarget>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="..\Common\Interfaces\IFileService.cs">
+      <Link>Common\Interfaces\IFileService.cs</Link>
+    </Compile>
+    <Compile Include="..\Common\Models\ExecutableFileSchema.cs">
+      <Link>Common\Models\ExecutableFileSchema.cs</Link>
+    </Compile>
+    <Compile Include="..\Common\Models\InstallationSchema.cs">
+      <Link>Common\Models\InstallationSchema.cs</Link>
+    </Compile>
+    <Compile Include="..\Common\Models\PrerequisiteSchema.cs">
+      <Link>Common\Models\PrerequisiteSchema.cs</Link>
+    </Compile>
+    <Compile Include="..\Common\Models\RegistryKeySchema.cs">
+      <Link>Common\Models\RegistryKeySchema.cs</Link>
+    </Compile>
+    <Compile Include="..\Common\Models\SchemaValidationError.cs">
+      <Link>Common\Models\SchemaValidationError.cs</Link>
+    </Compile>
+    <Compile Include="..\Common\Models\SchemaValidationResponse.cs">
+      <Link>Common\Models\SchemaValidationResponse.cs</Link>
+    </Compile>
+    <Compile Include="..\Common\Models\SchemaValidationWarning.cs">
+      <Link>Common\Models\SchemaValidationWarning.cs</Link>
+    </Compile>
+    <Compile Include="..\Common\Models\SystemRequirementsSchema.cs">
+      <Link>Common\Models\SystemRequirementsSchema.cs</Link>
+    </Compile>
+    <Compile Include="..\Common\Services\FileService.cs">
+      <Link>Common\Services\FileService.cs</Link>
+    </Compile>
     <Compile Include="Helpers\IRegistrySearchHelper.cs" />
     <Compile Include="Helpers\IWindowsVersionsHelper.cs" />
     <Compile Include="Helpers\RegistrySearchHelper.cs" />
@@ -60,10 +105,11 @@
     <None Include="app.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Common\Common.csproj">
-      <Project>{3FE8748B-507A-4C69-9A36-DE393CD04A18}</Project>
-      <Name>Common</Name>
-    </ProjectReference>
+    <BootstrapperPackage Include="Microsoft.Net.Framework.3.5.SP1">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

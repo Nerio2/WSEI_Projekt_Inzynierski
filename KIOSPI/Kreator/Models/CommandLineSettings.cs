@@ -33,23 +33,24 @@
                 }
                 EndApplication = true;
                 return;
+            }
 
 
-                foreach (var arg in supportedArgs)
+            foreach (var arg in supportedArgs)
+            {
+                if (arg.IsRequired && !arg.IsInvoked(args))
                 {
-                    if (arg.IsRequired && !arg.IsInvoked(args))
-                    {
-                        EndApplication = true;
-                        EndApplicationErrorMessage = $"Missing Cli parameter: {arg.ArgumentName}";
-                        return;
-                    }
-                }
-
-                foreach(var arg in supportedArgs)
-                {
-                    arg.ReadValue(args);
+                    EndApplication = true;
+                    EndApplicationErrorMessage = $"Missing Cli parameter: {arg.ArgumentName}";
+                    return;
                 }
             }
+
+            foreach (var arg in supportedArgs)
+            {
+                arg.ReadValue(args);
+            }
+
         }
     }
 }

@@ -10,6 +10,7 @@ namespace Instaler.Services
 
         public string Unpack(string packageDirectory = "package.zip")
         {
+            try { Directory.Delete(_unpackDirectory, true); } catch (Exception) { }
             ZipFile.ExtractToDirectory(packageDirectory, _unpackDirectory);
             return _unpackDirectory;
         }
