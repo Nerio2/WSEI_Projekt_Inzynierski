@@ -1,7 +1,6 @@
 ﻿using System;
 using System.IO;
 using System.Linq;
-using System.Threading;
 
 namespace Instaler.logger
 {
@@ -29,7 +28,7 @@ namespace Instaler.logger
         private string GetDrive()
             => Environment.GetLogicalDrives().Any(drive => drive.Equals(_defaultDrive)) ? _defaultDrive : Environment.GetLogicalDrives()[0];
 
-        private string _logMessagePrefix = DateTime.Now.ToString("yyyy-MM-dd_HH:mm:ss:fff") + " ";
+        private string _logMessagePrefix => DateTime.Now.ToString("yyyy-MM-dd_HH:mm:ss:fff") + " ";
         private string _logMessageSuffix = Environment.NewLine;
 
         public InstallerLogger()
